@@ -1,5 +1,4 @@
 import math
-import unittest
 import numpy as np
 
 def StandardProduct(A,B): # A and B are squared matrices of the same size
@@ -31,10 +30,10 @@ def StrassenProduct(A,B,threshold): # assuming the size of A and B are minimal s
     size = len(A)
     sizeB = len(B)
     # check if matrices meet the requirements of Strassen
-    if size != len(A[0]) or size % 2 != 0:
+    if size != len(A[0]) or (size & (size-1)) != 0:
         print "Error: The first matrix is not square or its size is not 2^n!"
         return None
-    elif sizeB != len(B[0]) or size(B) % 2 != 0:
+    elif sizeB != len(B[0]) or (sizeB & (sizeB - 1)) != 0:
         print "Error: The second matrix is not square or its size is not 2^n!"
         return None
 
@@ -86,7 +85,7 @@ def StrassenProduct(A,B,threshold): # assuming the size of A and B are minimal s
 
 if __name__ == "__main__":
     np.random.seed(1)
-    A = np.random.rand(3,3)
-    B = np.random.rand(3,3)
+    A = np.random.rand(6,6)
+    B = np.random.rand(6,6)
     StrassenProduct(A,B,1)
     pass
