@@ -29,6 +29,25 @@ class TestSubtract(unittest.TestCase):
         A = [[1,2,3],[4,5,6],[7,8,9]]
         B = [[3,2,1],[6,5,4],[9,8,7]]
         self.assertEqual(Subtract(A,B),[[-2,0,2],[-2,0,2],[-2,0,2]])
+        
+
+class TestFast_Add(unittest.TestCase):
+    def test_1d(self):
+        self.assertEqual(Fast_Add([[2]],[[3]],2),[[5]])
+
+    def test_int(self):
+        A = [[1,2,3],[4,5,6],[7,8,9]]
+        B = [[3,2,1],[6,5,4],[9,8,7]]
+        self.assertEqual(Fast_Add(A,B,2),[[4,4,4],[10,10,10],[16,16,16]])
+
+class TestFast_Subtract(unittest.TestCase):
+    def test_1d(self):
+        self.assertEqual(Fast_Subtract([[2]],[[3]],2),[[-1]])
+
+    def test_int(self):
+        A = [[1,2,3],[4,5,6],[7,8,9]]
+        B = [[3,2,1],[6,5,4],[9,8,7]]
+        self.assertEqual(Fast_Subtract(A,B,2),[[-2,0,2],[-2,0,2],[-2,0,2]])
 
 class TestStrassenProduct(unittest.TestCase):
     def test_id(self):
