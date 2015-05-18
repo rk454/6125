@@ -29,7 +29,7 @@ class TestSubtract(unittest.TestCase):
         A = [[1,2,3],[4,5,6],[7,8,9]]
         B = [[3,2,1],[6,5,4],[9,8,7]]
         self.assertEqual(Subtract(A,B),[[-2,0,2],[-2,0,2],[-2,0,2]])
-        
+
 
 class TestFast_Add(unittest.TestCase):
     def test_1d(self):
@@ -57,16 +57,18 @@ class TestStrassenProduct(unittest.TestCase):
         A = [[1,2,3,4],[4,5,6,7],[7,8,9,10],[10,11,12,13]]
         B = [[4,3,2,1],[7,6,5,4],[10,9,8,7],[13,12,11,10]]
         self.assertEqual(StrassenProduct(A,B,1),[[100,90,80,70],[202,180,158,136],[304,270,236,202],[406,360,314,268]])
-        
+
     def test_rand_float(self):
         np.random.seed(1)
         A = np.random.rand(4,4)
-        print A
         B = np.random.rand(4,4)
-        print "numpy", StandardProduct(A,B)
-        print "strassen", StrassenProduct(A,B,1)
+        strassen = StrassenProduct(A,B,1)
+        standard = StandardProduct(A,B)
+        for i in xrange(A.__len__()):
+                for j in xrange(A[0].__len__()):
+                    self.assertAlmostEqual(strassen[i][j], standard[i][j])
 
-class TestProduct(unittest.TestCase):        
+class TestProduct(unittest.TestCase):
     def test_notpow2(self):
         A = [[1,2,3],[4,5,6],[7,8,9]]
         B = [[3,2,1],[6,5,4],[9,8,7]]
