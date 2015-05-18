@@ -9,7 +9,7 @@ def StandardProduct(A,B): # A and B are squared matrices of the same size
             for k in xrange(size):
                 C[i][j] += A[i][k]*B[k][j]
     return C
-    
+
 def Add(A,B): # returns A+B
     size = A.__len__()
     C = [[A[i][j] + B[i][j] for j in xrange(size)] for i in xrange(size)]
@@ -19,7 +19,7 @@ def Subtract(A,B): # returns A-B
     size = A.__len__()
     C = [[A[i][j] - B[i][j] for j in xrange(size)] for i in xrange(size)]
     return C
-    
+
 
 def Fast_Add(A,B,b_size): # returns A+B
     size = A.__len__()
@@ -39,7 +39,7 @@ def Fast_Subtract(A,B,b_size): # returns A-B
                 for k in xrange(i,min(size,i+b_size)):
                     for l in xrange(j,min(size,j+b_size)):
                         C[k][l] = A[k][l] - B[k][l]
-    
+
     return C
 
 
@@ -55,12 +55,12 @@ def StrassenProduct(A,B,threshold): # assuming the size of A and B are minimal s
         A12 = [x[halfsize:] for x in A[:halfsize]]
         A21 = [x[:halfsize] for x in A[halfsize:]]
         A22 = [x[halfsize:] for x in A[halfsize:]]
-        
+
         B11 = [x[:halfsize] for x in B[:halfsize]]
         B12 = [x[halfsize:] for x in B[:halfsize]]
         B21 = [x[:halfsize] for x in B[halfsize:]]
         B22 = [x[halfsize:] for x in B[halfsize:]]
-        
+
 
         # compute intermediate matrices
         M1 = StrassenProduct(Add(A11,A22),Add(B11,B22),threshold)
@@ -80,7 +80,7 @@ def StrassenProduct(A,B,threshold): # assuming the size of A and B are minimal s
                 C[i+halfsize][j+halfsize] = M1[i][j] - M2[i][j] + M3[i][j] + M6[i][j]
 
     return C
-    
+
 def Product(A,B,threshold):
     sizeA = len(A)
     sizeB = len(B)
@@ -94,27 +94,54 @@ def Product(A,B,threshold):
     elif len(A[0]) != sizeB:
         print "Matrix dimension mismatch!"
         return None
-        
+
     if (sizeA & sizeA-1) == 0: # Matrix dimension is 2^n x 2^n
         return StrassenProduct(A,B,threshold)
-                
+
     else: # Matrix dimension is not 2^N, create 2^N matrix by padding zeros
         size = 2**sizeA.bit_length()
         A1 = [[0 for x in xrange(size)] for x in xrange(size)]
         B1 = [[0 for x in xrange(size)] for x in xrange(size)]
         for i in xrange(sizeA):
             for j in xrange(sizeA):
-                A1[i][j] = A[i][j] 
+                A1[i][j] = A[i][j]
         for i in xrange(sizeB):
             for j in xrange(sizeB):
-                B1[i][j] = B[i][j] 
+                B1[i][j] = B[i][j]
         C = StrassenProduct(A1,B1,threshold)
         return [[C[i][j] for j in xrange(sizeA)] for i in range(sizeA)]
-   
+
 
 if __name__ == "__main__":
+    import time
+    import matplotlib.pyplot as plt
+
     np.random.seed(1)
-    A = np.random.rand(6,6)
-    B = np.random.rand(6,6)
-    Product(A,B,1)
-    pass
+    strassenTime = []
+    standardTime = []
+
+    for i in xrange(10):
+        n = 2**i
+        A = np.random.rand(n,n)
+        B = np.random.rand(n,n)
+
+        s1 = time.time()
+        strassen = StrassenProduct(A,B,1)
+        e1 = time.time()
+        strassenTime.append(np.log2(e1-s1))
+
+        s2 = time.time()
+        standard = StandardProduct(A,B)
+        e2 = time.time()
+        standardTime.append(np.log2(e2-s2))
+
+    # plt.clf()
+    plt.figure()
+    plt.plot(strassenTime, color='b', label = 'strassen')
+    plt.plot(standardTime, color='r', label = 'standard')
+    plt.legend()
+    plt.title("Performance comparison of Strassen Product vs. Standard Product")
+    plt.xlabel("Log size of the matrices multiplied")
+    plt.ylabel("Time")
+    plt.show()
+
