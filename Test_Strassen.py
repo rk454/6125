@@ -38,7 +38,7 @@ class TestStrassenProduct(unittest.TestCase):
         A = [[1,2,3,4],[4,5,6,7],[7,8,9,10],[10,11,12,13]]
         B = [[4,3,2,1],[7,6,5,4],[10,9,8,7],[13,12,11,10]]
         self.assertEqual(StrassenProduct(A,B,1),[[100,90,80,70],[202,180,158,136],[304,270,236,202],[406,360,314,268]])
-
+        
     def test_rand_float(self):
         np.random.seed(1)
         A = np.random.rand(4,4)
@@ -46,6 +46,12 @@ class TestStrassenProduct(unittest.TestCase):
         B = np.random.rand(4,4)
         print "numpy", StandardProduct(A,B)
         print "strassen", StrassenProduct(A,B,1)
+
+class TestProduct(unittest.TestCase):        
+    def test_notpow2(self):
+        A = [[1,2,3],[4,5,6],[7,8,9]]
+        B = [[3,2,1],[6,5,4],[9,8,7]]
+        self.assertEqual(Product(A,B,1),[[42,36,30],[96,81,66],[150,126,102]])
 
 if __name__ == '__main__':
     unittest.main()

@@ -25,18 +25,12 @@ def Subtract(A,B): # returns A-B
         for j in range(size):
             C[i][j] = A[i][j] - B[i][j]
     return C
+    
+
+
 
 def StrassenProduct(A,B,threshold): # assuming the size of A and B are minimal size * 2^n where minimal size < threshold
     size = len(A)
-    sizeB = len(B)
-    # check if matrices meet the requirements of Strassen
-    if size != len(A[0]) or (size & (size-1)) != 0:
-        print "Error: The first matrix is not square or its size is not 2^n!"
-        return None
-    elif sizeB != len(B[0]) or (sizeB & (sizeB - 1)) != 0:
-        print "Error: The second matrix is not square or its size is not 2^n!"
-        return None
-
     # perform standard product if the size is smaller than threshold
     if size <= threshold:
         C = StandardProduct(A,B)
@@ -82,10 +76,41 @@ def StrassenProduct(A,B,threshold): # assuming the size of A and B are minimal s
                 C[i+halfsize][j+halfsize] = M1[i][j] - M2[i][j] + M3[i][j] + M6[i][j]
 
     return C
+    
+def Product(A,B,threshold):
+    sizeA = len(A)
+    sizeB = len(B)
+    # check if matrices meet the requirements of Strassen
+    if sizeA != len(A[0]):
+        print "Error: The first matrix is not square!"
+        return None
+    elif sizeB != len(B[0]):
+        print "Error: The second matrix is not square!"
+        return None
+    elif len(A[0]) != sizeB:
+        print "Matrix dimension mismatch!"
+        return None
+        
+    if (sizeA & sizeA-1) == 0: # Matrix dimension is 2^n x 2^n
+        return StrassenProduct(A,B,threshold)
+                
+    else: # Matrix dimension is not 2^N
+        size = 2**sizeA.bit_length()
+        A1 = [[0 for x in range(size)] for x in range(size)]
+        B1 = [[0 for x in range(size)] for x in range(size)]
+        for i in xrange(sizeA):
+            for j in xrange(sizeA):
+                A1[i][j] = A[i][j] 
+        for i in xrange(sizeB):
+            for j in xrange(sizeB):
+                B1[i][j] = B[i][j] 
+        C = StrassenProduct(A1,B1,threshold)
+        return [[C[i][j] for j in range(sizeA)] for i in range(sizeA)]
+   
 
 if __name__ == "__main__":
     np.random.seed(1)
     A = np.random.rand(6,6)
     B = np.random.rand(6,6)
-    StrassenProduct(A,B,1)
+    Product(A,B,1)
     pass
