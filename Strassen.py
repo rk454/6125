@@ -116,11 +116,11 @@ if __name__ == "__main__":
     import time
     import matplotlib.pyplot as plt
 
-    np.random.seed(1)
+    np.random.seed(2)
     strassenTime = []
     standardTime = []
 
-    for i in xrange(10):
+    for i in xrange(31):
         n = 2**i
         A = np.random.rand(n,n)
         B = np.random.rand(n,n)
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     plt.plot(standardTime, color='r', label = 'standard')
     plt.legend()
     plt.title("Performance comparison of Strassen Product vs. Standard Product")
-    plt.xlabel("Log size of the matrices multiplied")
-    plt.ylabel("Time")
+    plt.xlabel("Log (base 2) size of the matrices multiplied")
+    plt.ylabel("Log (base 2) Time")
     plt.show()
 
