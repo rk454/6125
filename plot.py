@@ -5,7 +5,7 @@ import Strassen
 import Strassen_np
 
 def ComparisonPlot(method, maxSize):
-    np.random.seed(2)
+    np.random.seed(1)
     strassenTime = []
     standardTime = []
 
@@ -24,6 +24,7 @@ def ComparisonPlot(method, maxSize):
         e2 = time.time()
         standardTime.append(np.log2(e2-s2))
 
+        print "completed size 2^", i
     # plt.clf()
     plt.figure()
     plt.plot(strassenTime, color='b', label = 'strassen')
@@ -36,4 +37,4 @@ def ComparisonPlot(method, maxSize):
 
 
 if __name__ == "__main__":
-    ComparisonPlot(Strassen_np, 10)
+    ComparisonPlot(Strassen_np, 11)
